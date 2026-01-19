@@ -32,7 +32,23 @@ export default class ProductDetails {
 }
 
 function productDetailsTemplate(product) {
-  document.querySelector("h2").textContent = product.Brand.Name;
+  const priceEl = document.getElementById("productPrice");
+
+  if (product.FinalPrice < product.SuggestedRetailPrice) {
+    const discountPercent = Math.round(
+      ((product.SuggestedRetailPrice - product.FinalPrice) /
+        product.SuggestedRetailPrice) *
+        100
+    );
+
+    priceEl.innerHTML = `
+      <span class="final-price">$${product.FinalPrice}</span>
+      <span class="original-price">$${product.SuggestedRetailPrice}</span>
+      <span class="discount-badge">Save ${discountPercent}%</span>
+    `;
+  } else {
+    priceEl.textContent = `$${product.FinalPrice}`;
+  }
   document.querySelector("h3").textContent = product.NameWithoutBrand;
 
   const productImage = document.getElementById("productImage");

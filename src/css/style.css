@@ -261,3 +261,25 @@ footer {
   font-size: var(--small-font);
   padding: 1em;
 }
+
+/* Price discount indicator */
+
+.final-price {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #777;
+  margin-left: 0.5rem;
+}
+
+.discount-badge {
+  background-color: #c62828;
+  color: white;
+  padding: 0.25em 0.5em;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+}
