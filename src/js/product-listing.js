@@ -1,12 +1,17 @@
-import { loadHeaderFooter, getParam } from "./utils.mjs";
 import ProductData from "./ProductData.mjs";
 import ProductList from "./ProductList.mjs";
+import { getParam, loadHeaderFooter } from "./utils.mjs";
 
-loadHeaderFooter();
+await loadHeaderFooter();
 
-const category = getParam("category");
+const searchTerm = getParam("search");
 const dataSource = new ProductData();
-const element = document.querySelector(".product-list");
-const listing = new ProductList(category, dataSource, element);
+const listElement = document.querySelector(".product-list");
 
-listing.init();
+const productList = new ProductList(listElement);
+
+if (searchTerm) {
+  const products = await dataSource.searchProducts(searchTerm);
+  console.log("SEARCH RESULTS:", products);
+  productList.renderList(products);
+}
