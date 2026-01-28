@@ -56,7 +56,7 @@ function productDetailsTemplate(product) {
 
     <img
       id="productImage"
-      src="${product.Image}"
+      src="${product.Images.PrimaryLarge}"
       alt="${product.NameWithoutBrand}"
     />
 
