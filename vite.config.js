@@ -2,6 +2,7 @@ import { resolve } from "path";
 import { defineConfig } from "vite";
 
 export default defineConfig({
+  base: "/WDD330-Team-06/",   // ⭐ REQUIRED for GitHub Pages
   root: "src/",
 
   build: {
@@ -17,4 +18,3 @@ export default defineConfig({
     },
   },
 });
-
