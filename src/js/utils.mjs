@@ -1,10 +1,3 @@
-export async function convertToJson(response) {
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  return response.json();
-}
-
 // wrapper for querySelector...returns matching element
 export function qs(selector, parent = document) {
   return parent.querySelector(selector);
@@ -14,8 +7,10 @@ export function qs(selector, parent = document) {
 
 // retrieve data from localstorage
 export function getLocalStorage(key) {
-  return JSON.parse(localStorage.getItem(key));
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : [];
 }
+
 // save data to local storage
 export function setLocalStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
@@ -37,13 +32,14 @@ export function getParam(param) {
   return product
 }
 
-export function renderListWithTemplate(template, parent, list) {
-  parent.innerHTML = "";
-  list.forEach((item) => {
-    parent.insertAdjacentHTML("beforeend", template(item));
-  });
+export function renderListWithTemplate(template, parentElement, list, position = "afterbegin", clear = false) {
+  const htmlStrings = list.map(template);
+  // if clear is true we need to clear out the contents of the parent.
+  if (clear) {
+    parentElement.innerHTML = "";
+  }
+  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
-
 
 export function renderWithTemplate(template, parentElement, data, callback) {
   parentElement.innerHTML = template;
@@ -59,9 +55,8 @@ async function loadTemplate(path) {
 }
 
 export async function loadHeaderFooter() {
-const headerTemplate = await loadTemplate("/partials/header.html");
-const footerTemplate = await loadTemplate("/partials/footer.html");
-
+  const headerTemplate = await loadTemplate("../partials/header.html");
+  const footerTemplate = await loadTemplate("../partials/footer.html");
 
   const headerElement = document.querySelector("#main-header");
   const footerElement = document.querySelector("#main-footer");
@@ -70,4 +65,13 @@ const footerTemplate = await loadTemplate("/partials/footer.html");
   renderWithTemplate(footerTemplate, footerElement);
 }
 
+export function formDataToJSON(formElement) {
+  const formData = new FormData(formElement);
+  const json = {};
 
+  formData.forEach((value, key) => {
+    json[key] = value;
+  });
+
+  return json;
+}

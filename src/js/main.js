@@ -1,17 +1,8 @@
 import { loadHeaderFooter } from "./utils.mjs";
+import Alert from "./Alert.js";
 
-async function initSearch() {
-  const form = document.querySelector("#search-form");
-  if (!form) return;
+loadHeaderFooter();
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const search = document.querySelector("#search-input").value.trim();
-    if (!search) return;
-
-    window.location.href = `/product_listing/index.html?search=${search}`;
-  });
-}
-
-await loadHeaderFooter();
-initSearch();
+// Initialize and display alerts
+const alert = new Alert();
+alert.init();
