@@ -1,7 +1,17 @@
 [
   {
-    "message": "Free shipping on orders over $50!",
-    "background": "#fef3c7",
-    "color": "#92400e"
+    "message": "Successfully added to cart.",
+    "background": "green",
+    "color": "black"
+  },
+  {
+    "message": "Encoutered an error.",
+    "background": "red",
+    "color": "white"
+  },
+  {
+    "message": "Updated.",
+    "background": "yellow",
+    "color": "black"
   }
 ]

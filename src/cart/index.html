@@ -14,15 +14,18 @@
   </head>
 
   <body>
-    <header class="divider" id="main-header">
-    </header>
+    <header class="divider" id="header"></header>
 
     <main class="divider">
+      <nav class="breadcrumbs">
+        <a href="/">Home</a>
+        <span>›</span>
+        <a href="#" id="previous-category"></a>
+      </nav>
       <section class="products">
         <h2>My Cart</h2>
 
-        <ul class="product-list">
-
+        <ul class="product-list cart">
           <!-- <li class="cart-card divider">
             <a href="product_pages/marmot-ajax-3.html" class="cart-card__image">
               <img
@@ -54,14 +57,13 @@
             <p class="cart-card__price">$199.99</p>
           </li> -->
         </ul>
-        <p class="cart-total">
-          Total: $<span id="cart-total">0.00</span>
-        </p>
-        <a href="../checkout/index.html" class="checkout-btn">Checkout</a>
-        
+        <div class="cart-footer hide">
+          <p class="cart-total">Total:</p>
+        </div>
       </section>
+      <a href="../checkout/index.html" id="checkout">Checkout</a>
     </main>
 
-    <footer id="main-footer"></footer>
+    <footer id="footer"></footer>
   </body>
 </html>

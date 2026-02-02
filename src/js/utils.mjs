@@ -1,3 +1,5 @@
+// PURELY FOR FUNCTIONS = ALL THE OTHER EXTRA STUFF
+
 // wrapper for querySelector...returns matching element
 export function qs(selector, parent = document) {
   return parent.querySelector(selector);
@@ -7,10 +9,8 @@ export function qs(selector, parent = document) {
 
 // retrieve data from localstorage
 export function getLocalStorage(key) {
-  const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : [];
+  return JSON.parse(localStorage.getItem(key));
 }
-
 // save data to local storage
 export function setLocalStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
@@ -32,8 +32,9 @@ export function getParam(param) {
   return product
 }
 
-export function renderListWithTemplate(template, parentElement, list, position = "afterbegin", clear = false) {
-  const htmlStrings = list.map(template);
+export function renderListWithTemplate(templateFn, parentElement, list, position = "afterbegin", clear = false) {
+  const htmlStrings = list.map(templateFn);
+  
   // if clear is true we need to clear out the contents of the parent.
   if (clear) {
     parentElement.innerHTML = "";
@@ -41,37 +42,78 @@ export function renderListWithTemplate(template, parentElement, list, position =
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
 
+// DISCOUNT FUNCTION
+export function calculateDiscount(listPrice, finalPrice) {
+
+  //no diiscount
+  if (listPrice === finalPrice) {
+    return null;
+  }
+
+  const discountPercent = ((listPrice - finalPrice) / listPrice) * 100;
+
+  return Math.round(discountPercent);
+}
+
 export function renderWithTemplate(template, parentElement, data, callback) {
   parentElement.innerHTML = template;
-  if (callback) {
+  if(callback) {
     callback(data);
   }
 }
 
-async function loadTemplate(path) {
+export async function loadTemplate(path) {
   const res = await fetch(path);
   const template = await res.text();
   return template;
 }
 
-export async function loadHeaderFooter() {
-  const headerTemplate = await loadTemplate("../partials/header.html");
-  const footerTemplate = await loadTemplate("../partials/footer.html");
+// Inside src/js/utils.mjs
 
-  const headerElement = document.querySelector("#main-header");
-  const footerElement = document.querySelector("#main-footer");
+export function updateCartCount() {
+  const cartItems = getLocalStorage("so-cart");
+  const countElement = qs(".cart-count");
 
-  renderWithTemplate(headerTemplate, headerElement);
-  renderWithTemplate(footerTemplate, footerElement);
+  if (countElement) {
+    // If we have items, calculate total quantity. If not, 0.
+    const totalCount = cartItems 
+      ? cartItems.reduce((sum, item) => sum + item.quantity, 0) 
+      : 0;
+
+    countElement.innerText = totalCount;
+    
+    // Show badge if count > 0, otherwise hide
+    countElement.style.display = totalCount > 0 ? "block" : "none";
+  }
 }
 
-export function formDataToJSON(formElement) {
-  const formData = new FormData(formElement);
-  const json = {};
+export function animateCart() {
+  const cartIcon = qs(".cart"); // This targets the div surrounding the icon
+  if (cartIcon) {
+    cartIcon.classList.add("anim-out");
+    // Remove class after 500ms so animation can run again
+    setTimeout(() => {
+      cartIcon.classList.remove("anim-out");
+    }, 500);
+  }
+}
 
-  formData.forEach((value, key) => {
-    json[key] = value;
+ export function loadHeaderFooter() {
+  loadTemplate("../partials/header.html").then((template) => {
+    renderWithTemplate(template, qs("#header"));
   });
+  loadTemplate("../partials/footer.html").then((template) => {
+    renderWithTemplate(template, qs("#footer"));
+    }
+  )
 
-  return json;
+  const checkHeaderInterval = setInterval(() => {
+    const cartCountElement = document.querySelector(".cart-count");
+    
+    // Once the element exists in the HTML
+    if (cartCountElement) {
+      updateCartCount();
+      clearInterval(checkHeaderInterval); 
+    }
+  }, 50);
 }

@@ -1,29 +1,47 @@
-import ProductData from './ProductData.mjs';
-import ProductList from './ProductList.mjs';
-import { loadHeaderFooter, getParam } from './utils.mjs';
+import ExternalServices from "./ExternalServices.mjs";
+import ProductList from "./ProductList.mjs";
+import { getParam } from "./utils.mjs";
+import { loadHeaderFooter } from "./utils.mjs";
 
 loadHeaderFooter();
 
-const category = getParam('category');
+// order
+const category = getParam("category");
 
-// Update the page title to include the category
-function formatCategoryName(category) {
-  return category
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+// Store category info in localStorage for breadcrumbs
+if (category) {
+  const categoryName = category
+    .replace("-", " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+  localStorage.setItem("lastCategory", categoryName);
+  localStorage.setItem(
+    "lastCategoryUrl",
+    `/product_listing/?category=${category}`,
+  );
 }
 
-const categoryTitle = document.querySelector('#category-title');
-if (categoryTitle && category) {
-  categoryTitle.textContent = `Top Products: ${formatCategoryName(category)}`;
-}
+const dataSource = new ExternalServices();
 
-// first create an instance of the ProductData class.
-const dataSource = new ProductData();
-// then get the element you want the product list to render in
-const listElement = document.querySelector('.product-list');
-// then create an instance of the ProductList class and send it the correct information.
-const myList = new ProductList(category, dataSource, listElement);
-// finally call the init method to show the products
+const element = document.querySelector(".product-list");
+
+const myList = new ProductList(category, dataSource, element);
+
 myList.init();
+
+const categoryNameEl = document.getElementById("category-name");
+
+if (categoryNameEl) {
+  categoryNameEl.textContent = category
+    ? category.replace("-", " ").replace(/\b\w/g, (c) => c.toUpperCase())
+    : "Products";
+}
+
+const productCountEl = document.getElementById("product-count");
+
+if (productCountEl) {
+  dataSource.getData(category).then((list) => {
+    productCountEl.textContent = `${list.length} items`;
+  });
+}
+
+loadHeaderFooter();

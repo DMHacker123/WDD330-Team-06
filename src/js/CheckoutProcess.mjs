@@ -1,51 +1,96 @@
+import { getLocalStorage } from "./utils.mjs";
+import ExternalServices from "./ExternalServices.mjs";
+
+const services = new ExternalServices(); 
+
+function formDataToJSON(formElement) {
+  const formData = new FormData(formElement),
+    convertedJSON = {};
+
+  formData.forEach(function (value, key) {
+    convertedJSON[key] = value;
+  });
+
+  return convertedJSON;
+}
+
+function packageItems(items) {
+    const simplifiedItems = items.map((item) => {
+        console.log(item);
+        return {
+            id: item.Id,
+            price: item.FinalPrice,
+            name: item.Name,
+            quantity: 1,
+        };
+    });
+    return simplifiedItems;
+}
+
 export default class CheckoutProcess {
-  constructor(key, outputSelector) {
+    constructor(key, outputSelector) {
     this.key = key;
     this.outputSelector = outputSelector;
     this.list = [];
     this.itemTotal = 0;
-    this.tax = 0;
     this.shipping = 0;
+    this.tax = 0;
     this.orderTotal = 0;
   }
 
-  getCartItems() {
-    const cart = localStorage.getItem(this.key);
-    this.list = cart ? JSON.parse(cart) : [];
-  }
-
-  cleanPrice(value) {
-    if (typeof value === "string") {
-      return Number(value.replace("$", ""));
+    init() {
+        this.list = getLocalStorage(this.key);
+        this.calculateItemSummary();
     }
-    return Number(value);
+
+    calculateItemSummary() {
+        // selectors that target sections in the page
+        const summaryElement = document.querySelector(this.outputSelector + " #cartTotal");
+        const itemNumElement = document.querySelector(this.outputSelector + " #num-items");
+
+        // calculates the number of items
+        itemNumElement.innerText = this.list.length;
+
+        // calculates the total price
+        const amounts = this.list.map((item) => item.FinalPrice);
+        this.itemTotal = amounts.reduce((sum, item) => sum + item);
+        summaryElement.innerText = `$${this.itemTotal.toFixed(2)}`;
+        };
+
+    calculateOrderTotal() {
+        this.tax = (this.itemTotal * 0.06);
+        this.shipping = 10 + (this.list.length - 1) * 2;
+        this.orderTotal = parseFloat(this.tax) + parseFloat(this.itemTotal) + parseFloat(this.shipping);
+
+        this.displayOrderTotals();
+    }
+
+    displayOrderTotals() {
+    // once the totals are all calculated display them in the order summary page
+    const tax = document.querySelector(`${this.outputSelector} #tax`);
+    const shipping = document.querySelector(`${this.outputSelector} #shipping`);
+    const orderTotal = document.querySelector(`${this.outputSelector} #orderTotal`);
+    
+    tax.innerText = `$${this.tax.toFixed(2)}`;
+    shipping.innerText = `$${this.shipping.toFixed(2)}`;
+    orderTotal.innerText = `$${this.orderTotal.toFixed(2)}`;
   }
 
-  calculateItemSubTotal() {
-    this.itemTotal = this.list.reduce((sum, item) => {
-      const price = this.cleanPrice(item.price ?? item.Price);
-      return sum + price * item.quantity;
-    }, 0);
+  async checkout() {
+    const form = document.forms.checkout;
+    const order = formDataToJSON(form);
 
-    document.querySelector(
-      `${this.outputSelector} #subtotal`
-    ).innerText = `$${this.itemTotal.toFixed(2)}`;
-  }
+    order.orderDate = new Date().toISOString();
+    order.orderTotal = this.orderTotal;
+    order.tax = this.tax;
+    order.shipping = this.shipping;
+    order.items = packageItems(this.list);
 
-  calculateOrderTotal() {
-    this.tax = this.itemTotal * 0.06;
-    this.shipping = 10 + (this.list.length - 1) * 2;
-    this.orderTotal = this.itemTotal + this.tax + this.shipping;
-    this.displayOrderTotals();
-  }
-
-  displayOrderTotals() {
-    document.querySelector(`${this.outputSelector} #tax`).innerText =
-      `$${this.tax.toFixed(2)}`;
-    document.querySelector(`${this.outputSelector} #shipping`).innerText =
-      `$${this.shipping.toFixed(2)}`;
-    document.querySelector(`${this.outputSelector} #orderTotal`).innerText =
-      `$${this.orderTotal.toFixed(2)}`;
+    try {
+        const response = await services.checkout(order);
+        console.log(response);
+    } catch (err) {
+        console.log(err);
+    }
   }
 }
-

@@ -131,6 +131,124 @@ button {
   fill: gray;
 }
 
+/* ========================================= */
+/* ADD TO BOTTOM OF src/css/style.css       */
+/* ========================================= */
+
+/* --- Superscript Number Badge --- */
+.cart-count {
+  position: absolute;
+  top: 10px; /* Positions it vertically on top of the icon */
+  right: -5px; /* Positions it slightly to the right of the icon */
+  background-color: #de4747; /* Red color to grab attention */
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 1px 5px;
+  border-radius: 50%;
+  min-width: 15px;
+  line-height: 15px;
+  text-align: center;
+  z-index: 10;
+  display: none; /* Hidden by default, JS will show it if > 0 */
+  pointer-events: none; /* Allows clicks to pass through to the link */
+}
+
+/* --- Backpack Shake Animation --- */
+@keyframes shake {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(-15deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* JavaScript adds this class when you click "Add to Cart" */
+.anim-out {
+  animation: shake 0.5s ease-in-out;
+  transform-origin: center center;
+}
+
+/* Breadcrumbs styles */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  padding: 1rem 0;
+  gap: 0;
+  overflow: hidden;
+}
+
+.breadcrumbs a,
+.breadcrumbs span {
+  padding: 0.75rem 2rem 0.75rem 2.5rem;
+  background: #080808;
+  color: white;
+  text-decoration: none;
+  position: relative;
+  font-size: 0.95rem;
+  transition: background 0.3s;
+  display: inline-block;
+}
+
+.breadcrumbs a:first-child {
+  padding-left: 1.5rem;
+  border-radius: 4px 0 0 4px;
+}
+
+/* Chevron arrow pointing right */
+.breadcrumbs a::after {
+  content: "";
+  position: absolute;
+  right: -1rem;
+  top: -1px;
+  width: 0;
+  height: 0;
+  border-top: 1.375rem solid transparent;
+  border-bottom: 1.375rem solid transparent;
+  border-left: 1rem solid #080808;
+  z-index: 1;
+  transition: border-color 0.3s;
+}
+
+/* Different color for category */
+.breadcrumbs a:nth-child(3) {
+  background: #834001;
+}
+
+.breadcrumbs a:nth-child(3)::after {
+  border-left-color: #834001;
+}
+
+/* Current page (last span) */
+.breadcrumbs span:last-child {
+  background: #b15e10;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Hide separator spans (›) */
+.breadcrumbs > span:not(:last-child) {
+  display: none;
+}
+
+/* Hover effect */
+.breadcrumbs a:hover {
+  background: #1976d2;
+}
+
+.breadcrumbs a:hover::after {
+  border-left-color: #1976d2;
+}
+
 /* End cart icon styles */
 
 .mission {
@@ -163,6 +281,10 @@ button {
   justify-content: center;
 }
 
+.product-list.cart {
+  flex-flow: column;
+}
+
 .product-list a {
   text-decoration: none;
   color: var(--dark-grey);
@@ -193,6 +315,7 @@ button {
 
 /* End product list card */
 
+/* Styles for product details */
 .product-detail {
   padding: 1em;
   max-width: 500px;
@@ -201,11 +324,48 @@ button {
 
 .product-detail img {
   width: 100%;
+  padding: 2rem;
+}
+
+/* End product details styles */
+
+/* Styles for product listings */
+.prod-categories {
+  margin: 20px;
+}
+
+.prod-categories h2 {
+  text-align: center;
+  margin: 20px;
+}
+
+.categories {
+  display: flex;
+  justify-content: space-around;
+}
+
+.categories img {
+  width: 100px;
+}
+
+.category-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.category-title {
+  text-transform: capitalize;
 }
 
 /* Start cart list card styles */
 .cart-card {
   display: grid;
+  position: relative;
   grid-template-columns: 25% auto 15%;
   font-size: var(--small-font);
   /* max-height: 120px; */
@@ -241,6 +401,108 @@ button {
   grid-column: 3;
 }
 
+.cart-card__remove {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background-color: #333;
+  padding: 0;
+}
+
+.cart-card__remove::before {
+  content: "\00d7";
+  color: black;
+  margin: 0;
+  padding: 0;
+  font-size: 2rem;
+  background-color: #fff;
+  display: block;
+}
+
+.cart-footer {
+  text-align: right;
+}
+
+.cart-footer.hide {
+  display: none;
+}
+
+#checkout {
+  padding: 0.5em 2em;
+  background-color: var(--secondary-color);
+  color: white;
+  margin: auto;
+  display: block;
+  width: fit-content;
+  border: 0;
+  font-size: var(--large-font);
+  cursor: pointer;
+  margin-bottom: 10px;
+  text-decoration: none;
+}
+
+/* Start checkout styles */
+.checkout-form {
+  padding: 10px;
+}
+
+.checkout-form input {
+  margin: 2px 0 10px 0;
+  padding: 8px;
+}
+
+.checkout-form input:valid {
+  border-bottom: 5px solid green;
+}
+
+.checkout- {
+  margin: 0 10px 0 10px;
+}
+
+.checkout-form fieldset {
+  margin-bottom: 20px;
+}
+
+.checkout-form legend {
+  margin-bottom: 20px;
+  margin-left: 10px;
+  padding: 10px;
+  background-color: var(--dark-grey);
+  color: white;
+}
+
+.checkout__name,
+.checkout__address,
+.checkout__payment,
+.order__summary {
+  display: flex;
+  flex-direction: column;
+  margin: 0 10px 0 10px;
+}
+
+.order__summary #num-items,
+.order__summary #cartTotal,
+.order__summary #tax,
+.order__summary #shipping,
+.order__summary #orderTotal {
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.order__summary #orderTotal {
+  font-size: 24px;
+}
+
+/* DISCOUNT FLAG CSS */
+.discount {
+  background-color: red;
+  width: 40%;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
 @media screen and (min-width: 500px) {
   body {
     max-width: 1080px;
@@ -260,72 +522,4 @@ button {
 footer {
   font-size: var(--small-font);
   padding: 1em;
-}
-
-/* Price discount indicator */
-
-.final-price {
-  font-size: 1.3rem;
-  font-weight: bold;
-}
-
-.original-price {
-  text-decoration: line-through;
-  color: #777;
-  margin-left: 0.5rem;
-}
-
-.discount-badge {
-  background-color: #c62828;
-  color: white;
-  padding: 0.25em 0.5em;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  margin-left: 0.5rem;
-}
-
-.hide {
-  display: none;
-}
-
-.cart-footer {
-  margin-top: 1rem;
-  padding: 1rem;
-  border-top: 1px solid #ccc;
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
-.alert {
-  height: auto;
-  min-height: unset;
-  display: block;
-}
-
-#alerts {
-  width: 100%;
-}
-
-.alert {
-  background-color: #fef3c7;
-  color: #92400e;
-  padding: 1rem;
-  text-align: center;
-  font-weight: 600;
-  border-bottom: 2px solid #f59e0b;
-}
-
-.alert p {
-  margin: 0;
-}
-
-.alert-list {
-  width: 100%;
-}
-
-.alert-list p {
-  margin: 0;
-  padding: 1rem;
-  text-align: center;
-  font-weight: 600;
 }
