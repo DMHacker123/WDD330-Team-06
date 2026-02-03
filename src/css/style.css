@@ -306,6 +306,36 @@ button {
   }
 }
 
+/* Alert styles */
+.alert {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fdecea;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin: 0.5rem 1rem;
+}
+
+.alert p {
+  margin: 0;
+  padding: 0;
+}
+
+.alert__close {
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #721c24;
+  line-height: 1;
+}
+
+.alert__close:hover {
+  color: #491217;
+}
+/* End alert styles */
+
 footer {
   font-size: var(--small-font);
   border-top: 1px solid var(--tertiary-color);
