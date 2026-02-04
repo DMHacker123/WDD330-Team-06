@@ -1,0 +1,1 @@
+import{l as s,a as c}from"./utils-DsyKi0Bb.js";import{P as e}from"./ProductList-BxuKCMVH.js";import{P as i}from"./ProductData-CaWxppSx.js";async function n(){await s();const t=c("search"),r=new i("tents"),a=new e(".product-list",r);if(t){const o=await r.searchProducts(t);a.renderList(o)}}n();
