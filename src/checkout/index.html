@@ -35,7 +35,7 @@
             <label for="state">State</label>
             <input type="text" name="state" id="state" required>
             <label for="zip">Zip</label>
-            <input type="text" name="zip" id="zip" required pattern="[0-9]{5}(-[0-9]{4})?" placeholder="12345">
+            <input type="text" name="zip" id="zip" required>
           </div>
         </fieldset>
 
@@ -43,11 +43,11 @@
           <legend>Payment</legend>
           <div class="checkout__payment">
             <label for="cardNumber">Card Number</label>
-            <input type="text" name="cardNumber" id="cardNumber" required pattern="[0-9]{16}" minlength="16" maxlength="16" placeholder="1234567890123456">
+            <input type="text" name="cardNumber" id="cardNumber" required>
             <label for="expiration">Expiration</label>
-            <input type="text" name="expiration" id="expiration" required pattern="(0[1-9]|1[0-2])\/[0-9]{2}" placeholder="MM/YY">
+            <input type="text" name="expiration" id="expiration" required>
             <label for="code">CVV</label>
-            <input type="text" name="code" id="code" required pattern="[0-9]{3,4}" minlength="3" maxlength="4" placeholder="123">
+            <input type="text" name="code" id="code" required>
           </div>
         </fieldset>
 
