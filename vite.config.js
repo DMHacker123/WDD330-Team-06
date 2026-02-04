@@ -3,9 +3,11 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   root: "src/",
+  base: "/WDD330-Team-06/",
 
   build: {
     outDir: "../dist",
+    emptyOutDir: true,
     rollupOptions: {
       input: {
         main: resolve(__dirname, "src/index.html"),
@@ -13,9 +15,7 @@ export default defineConfig({
         checkout: resolve(__dirname, "src/checkout/index.html"),
         product: resolve(__dirname, "src/product_pages/index.html"),
         productListing: resolve(__dirname, "src/product_listing/index.html"),
-        success: resolve(__dirname, "src/checkout/success.html"),
       },
     },
   },
-},
-);
+});
