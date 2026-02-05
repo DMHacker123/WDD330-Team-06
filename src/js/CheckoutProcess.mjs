@@ -15,12 +15,11 @@ function formDataToJSON(formElement) {
 
 function packageItems(items) {
   const simplifiedItems = items.map((item) => {
-    console.log(item);
     return {
       id: item.Id,
       price: item.FinalPrice,
       name: item.Name,
-      quantity: 1,
+      quantity: item.quantity,
     };
   });
   return simplifiedItems;
@@ -50,17 +49,17 @@ export default class CheckoutProcess {
     const itemNumElement = document.querySelector(
       this.outputSelector + " #num-items"
     );
-    itemNumElement.innerText = this.list.length;
+    itemNumElement.innerText = this.list.reduce((sum, item) => sum + item.quantity, 0);
     // calculate the total of all the items in the cart
-    const amounts = this.list.map((item) => item.FinalPrice);
-    this.itemTotal = amounts.reduce((sum, item) => sum + item);
-    summaryElement.innerText = `$${this.itemTotal}`;;
+    this.itemTotal = this.list.reduce((sum, item) => sum + item.FinalPrice * item.quantity, 0);
+    summaryElement.innerText = `$${this.itemTotal.toFixed(2)}`;
   }
 
   calculateOrderTotal() {
     // calculate the shipping and tax amounts. Then use them to along with the cart total to figure out the order total
     this.tax = (this.itemTotal * .06);
-    this.shipping = 10 + (this.list.length - 1) * 2;
+    const totalQuantity = this.list.reduce((sum, item) => sum + item.quantity, 0);
+    this.shipping = 10 + (totalQuantity - 1) * 2;
     this.orderTotal = (
       parseFloat(this.itemTotal) +
       parseFloat(this.tax) +
