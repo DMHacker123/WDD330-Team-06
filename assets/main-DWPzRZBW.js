@@ -1,0 +1,1 @@
+import{l as t}from"./utils-C4nQLX5g.js";/* empty css              */async function a(){const o=await fetch("/WDD330-Team-06/json/alerts.json");if(!o.ok)throw new Error("Failed to load alerts");return await o.json()}async function e(){try{await a()}catch(r){console.error("Error loading alerts:",r)}t()}e();
