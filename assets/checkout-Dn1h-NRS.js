@@ -1,0 +1,1 @@
+import{l as r}from"./utils-DYUUmGX3.js";import{C as o}from"./CheckoutProcess--BBjD6sa.js";import"./ExternalServices-D9P6I627.js";r();const e=new o("so-cart",".checkout-summary");e.init();document.querySelector("#zip").addEventListener("blur",e.calculateOrderTotal.bind(e));document.querySelector("#checkoutSubmit").addEventListener("click",t=>{t.preventDefault(),e.checkout()});
